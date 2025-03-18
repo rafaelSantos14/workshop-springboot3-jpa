@@ -13,6 +13,8 @@ import com.educandoweb.course.repositories.UserRepository;
 import com.educandoweb.course.services.exceptions.DataBaseException;
 import com.educandoweb.course.services.exceptions.ResourceNotFoundException;
 
+import jakarta.persistence.EntityNotFoundException;
+
 /*Anotação para registrar o UserService como componente do Spring, assim é possível injetar automaticamente com @Autowired no UserResource
   Tem específicas, no caso vamos usar a Service 
 	@Component 
@@ -40,11 +42,11 @@ public class UserService {
 
 	public void delete(Long id) {
 		try {
-			
+
 			if (!repository.existsById(id)) {
-					throw new ResourceNotFoundException(id);
+				throw new ResourceNotFoundException(id);
 			}
-			
+
 			repository.deleteById(id);
 		} catch (DataIntegrityViolationException e) {
 			throw new DataBaseException(e.getMessage());
@@ -52,9 +54,13 @@ public class UserService {
 	}
 
 	public User update(Long id, User obj) {
-		User entity = repository.getReferenceById(id);
-		updateData(entity, obj);
-		return repository.save(entity);
+		try {
+			User entity = repository.getReferenceById(id);
+			updateData(entity, obj);
+			return repository.save(entity);
+		} catch (EntityNotFoundException e) {
+			throw new ResourceNotFoundException(id);
+		}
 	}
 
 	private void updateData(User entity, User obj) {
