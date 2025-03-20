@@ -25,7 +25,7 @@ import com.educandoweb.course.repositories.UserRepository;
 @Profile("test") //referenciando ao nome de profile que foi dado no arquivo "application.properties"
 public class testConfig implements CommandLineRunner {
 	
-	@Autowired //Essa anotação o proprio spring resolve a dependencia e associar uma instancia UserRepository aqui dentro
+	@Autowired //Essa anotação o proprio spring resolve a dependencia e associa uma instancia UserRepository aqui dentro
 	private UserRepository userRespository;
 	
 	@Autowired
